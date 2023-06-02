@@ -29,7 +29,7 @@ export default function AsyncDataContextProvider({ children }) {
   };
   const removeToken = () => {
     AsyncStorage.removeItem("@token");
-    setToken(null);
+    setToken();
   };
 
   const storeUserData = async (value) => {
@@ -43,7 +43,7 @@ export default function AsyncDataContextProvider({ children }) {
   };
   const removeUserData = () => {
     AsyncStorage.removeItem("@user_data");
-    setToken(null);
+    setUserData();
   };
 
   const getUserData = async () => {

@@ -19,6 +19,7 @@ import Login from "../../screens/Login/Login";
 import ForgotPassword from "../../screens/ForgotPassword/ForgotPassword";
 import SignUp from "../../screens/SignUp/SignUp";
 import Country from "../../screens/Country/Country";
+import RatingScreen from "../../screens/RatingScreen/RatingScreen";
 
 const Stack = createStackNavigator();
 
@@ -43,6 +44,7 @@ export default function MainNavigator() {
       <Stack.Screen name="forget" component={ForgotPassword} />
       <Stack.Screen name="signup" component={SignUp} />
       <Stack.Screen name="country" component={Country} />
+      <Stack.Screen name="rating" component={RatingScreen} />
     </Stack.Navigator>
   );
 }

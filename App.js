@@ -1,3 +1,5 @@
+// 671011928468-tkeiaggooqnh78dv3t6p0ofh8kior2j2.apps.googleusercontent.com ios
+// 671011928468-b9sn9939gtnp7j36sde9o3skpoitvs38.apps.googleusercontent.com android
 import { StatusBar } from "expo-status-bar";
 import { ThemeProvider } from "styled-components";
 import { theme } from "./src/infrastructure/theme/theme";

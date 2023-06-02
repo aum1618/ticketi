@@ -109,7 +109,7 @@ export default function BusCard({ bus, navigation }) {
         </View>
         <Spacer position="h" size="m" />
         <View style={{ flexDirection: "row", width: "50%" }}>
-          <P style={{ color: "#4bb543", fontWeight: "bold" }}>
+          <P style={{ color: "white", fontWeight: "bold" }}>
             {bus.item.available_seat} Seats Available
           </P>
         </View>

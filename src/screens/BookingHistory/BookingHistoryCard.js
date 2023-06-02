@@ -1,14 +1,33 @@
 import { View, Text } from "react-native";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Spacer } from "../../infrastructure/components/spacer";
 import { P } from "../../infrastructure/components/Text";
 import { Button } from "react-native-paper";
 import { ApiData } from "../../services/context/ApiDataContext/ApiDataProvider";
+import axios from "axios";
+import { baseUrl } from "../../baseUrl/baseUrl";
+import { AsyncDataContext } from "../../services/context/AsyncDataContext/AsyncDataContext";
 
 export default function BookingHistoryCard({ item, navigation }) {
   const { locations } = useContext(ApiData);
+  const { userData } = useContext(AsyncDataContext);
+  const [rated, setRated] = useState(false);
   const pickLocation = locations.find((x) => x.id === item.pick_location_id);
   const dropLocation = locations.find((x) => x.id === item.drop_location_id);
+  console.log(userData);
+
+  useEffect(() => {
+    axios
+      .get(`${baseUrl}ratings/getall/review/${item.subtrip_id}`)
+      .then((res) => {
+        const ratings = res.data.data;
+        const isRated = ratings.some(
+          (rating) => rating.user_id === userData.user_id
+        );
+
+        setRated(isRated);
+      });
+  }, []);
 
   const handlePress = () => {
     navigation.navigate("Ticket", {
@@ -100,18 +119,31 @@ export default function BookingHistoryCard({ item, navigation }) {
           <View
             style={{
               width: "100%",
-              justifyContent: "center",
+              justifyContent: "space-evenly",
               alignItems: "center",
+              flexDirection: "row",
             }}
           >
             <Button
               onPress={handlePress}
               buttonColor="#1550bd"
-              style={{ marginTop: 10, width: "60%" }}
+              style={{ marginTop: 10, width: "40%" }}
               mode="contained"
             >
-              <P>Show Ticket</P>
+              <P>Ticket</P>
             </Button>
+            {!rated && (
+              <Button
+                onPress={() => {
+                  navigation.navigate("rating", { item: item });
+                }}
+                buttonColor="#1550bd"
+                style={{ marginTop: 10, width: "40%" }}
+                mode="contained"
+              >
+                <P>Rate</P>
+              </Button>
+            )}
           </View>
         </View>
       )}

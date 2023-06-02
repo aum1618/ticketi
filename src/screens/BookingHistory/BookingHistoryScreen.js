@@ -9,10 +9,17 @@ import { baseUrl } from "../../baseUrl/baseUrl";
 import { T } from "../../infrastructure/components/Text";
 import BookingHistoryCard from "./BookingHistoryCard";
 import AnimatedLottieView from "lottie-react-native";
+import RatingModal from "./RatingModal";
 
 export default function BookingHistoryScreen({ navigation }) {
   const [bookedTickets, setBookedTickets] = useState();
   const { token } = useContext(AsyncDataContext);
+  const [isRatingModalVisible, setIsRatingModalVisible] = useState(false);
+
+  const toggleRatingModal = () => {
+    setIsRatingModalVisible(!isRatingModalVisible);
+  };
+
   const getBookingHistory = () => {
     axios
       .get(`${baseUrl}passangers/tickets`, {
@@ -46,6 +53,7 @@ export default function BookingHistoryScreen({ navigation }) {
                   <BookingHistoryCard
                     item={item.item}
                     navigation={navigation}
+                    toggleRatingModal={toggleRatingModal}
                   />
                 )}
                 keyExtractor={(item) => item.id}

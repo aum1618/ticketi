@@ -25,6 +25,7 @@ export default function PayCash({ navigation, route }) {
     selectedtotal,
     selectedSubTotal,
     selectedvat,
+    journeydate,
   } = useContext(ApiResponseContext);
   const [loading, setLoading] = useState(false);
 
@@ -60,7 +61,7 @@ export default function PayCash({ navigation, route }) {
     bookingData.append("cseat", cseat);
     bookingData.append("spseat", sseat);
 
-    bookingData.append("journeydate", moment().format("YYYY-M-D"));
+    bookingData.append("journeydate", journeydate);
     bookingData.append("returndate");
 
     bookingData.append("paydetail", "This is pay details");

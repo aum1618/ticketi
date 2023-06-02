@@ -1,11 +1,13 @@
 import { ImageBackground, View } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import { Wrapper } from "../../infrastructure/components/Wrapper";
 import { Avatar, List } from "react-native-paper";
-import { T } from "../../infrastructure/components/Text";
+import { C, P, T } from "../../infrastructure/components/Text";
 import ListItem from "./DrawerScreenComponents/ListItem/ListItem";
+import { AsyncDataContext } from "../../services/context/AsyncDataContext/AsyncDataContext";
 
 export default function DrawerScreen({ navigation }) {
+  const { userData } = useContext(AsyncDataContext);
   return (
     <Wrapper>
       <ImageBackground
@@ -27,8 +29,32 @@ export default function DrawerScreen({ navigation }) {
           />
           <T style={{ color: "white" }}>Tiketi Popoti</T>
         </View>
-        <View style={{ flex: 1, padding: 10 }}>
-          <ListItem navigation={navigation} />
+        <View style={{ flex: 1, padding: 10, justifyContent: "space-between" }}>
+          <View>
+            <ListItem navigation={navigation} />
+          </View>
+          {userData && (
+            <View
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                paddingBottom: 20,
+              }}
+            >
+              {userData.country_id === "162" ? (
+                <>
+                  <P style={{ color: "#f0f0f0" }}>Made in 🇵🇰 with ❤️</P>
+                  <P style={{ color: "#f0f0f0" }}>Powered by : MR.AUM</P>
+                </>
+              ) : (
+                <>
+                  <P style={{ color: "#f0f0f0" }}>Made in 🇮🇳 with ❤️</P>
+                  <P style={{ color: "#f0f0f0" }}>Powered by : ASCITHUB-LKO</P>
+                </>
+              )}
+            </View>
+          )}
         </View>
       </ImageBackground>
     </Wrapper>

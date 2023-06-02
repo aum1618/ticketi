@@ -1,10 +1,15 @@
 import { View, Text, ImageBackground, Image, Alert } from "react-native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Wrapper } from "../../infrastructure/components/Wrapper";
-import { Avatar, Button, TextInput } from "react-native-paper";
+import { Avatar, Button, IconButton, TextInput } from "react-native-paper";
 import { H4, P, T } from "../../infrastructure/components/Text";
 import axios from "axios";
 import { AsyncDataContext } from "../../services/context/AsyncDataContext/AsyncDataContext";
+import { maybeCompleteAuthSession } from "expo-web-browser";
+import { useAuthRequest } from "expo-auth-session/build/providers/Google";
+import { baseUrl } from "../../baseUrl/baseUrl";
+
+maybeCompleteAuthSession();
 
 export default function Login({ navigation }) {
   const { storeToken, storeUserData } = useContext(AsyncDataContext);
@@ -12,6 +17,14 @@ export default function Login({ navigation }) {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [token, setToken] = useState("");
+  const [userInfo, setUserInfo] = useState(null);
+  const [request, response, promptAsync] = useAuthRequest({
+    androidClientId:
+      "671011928468-b9sn9939gtnp7j36sde9o3skpoitvs38.apps.googleusercontent.com",
+    iosClientId:
+      "671011928468-tkeiaggooqnh78dv3t6p0ofh8kior2j2.apps.googleusercontent.com",
+  });
 
   const validateEmail = (email) => {
     return String(email)
@@ -19,6 +32,80 @@ export default function Login({ navigation }) {
       .match(
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       );
+  };
+  useEffect(() => {
+    if (response?.type === "success") {
+      setToken(response.authentication.accessToken);
+      getUserInfo();
+    }
+  }, [response, token]);
+
+  useEffect(() => {
+    console.log(userInfo);
+  }, [userInfo]);
+
+  const getUserInfo = async () => {
+    setLoading(true);
+    try {
+      await fetch("https://www.googleapis.com/userinfo/v2/me", {
+        headers: { Authorization: `Bearer ${token}` },
+      }).then(async (response) => {
+        const user = await response.json();
+        const form = new FormData();
+        form.append("appid", user.id);
+        form.append("first_name", user.given_name);
+        form.append("last_name", user.family_name);
+        form.append("email", user.email);
+        axios.postForm(`${baseUrl}passangers/loginsocial`, form).then((res) => {
+          console.log(res.data.data);
+          if (res.data.status === "success") {
+            storeToken(res.data.data);
+
+            axios
+              .get(
+                "https://tiketipopote.co.tz/adminpanel/modules/api/v1/passangers/info",
+                {
+                  headers: {
+                    Authorization: `Bearer ${res.data.data}`,
+                  },
+                }
+              )
+              .then((response) => {
+                console.log(response.data.data);
+                storeUserData(response.data.data);
+              })
+              .finally(() => {
+                navigation.navigate("ticketSearch");
+                setLoading(false);
+              });
+          } else {
+            // Alert.alert(
+            //   "Login Failed.Try Again",
+            //   res.data.message,
+            //   [
+            //     {},
+            //     {},
+            //     {
+            //       text: "OK",
+            //       onPress: () => {
+            //         console.log("OK Pressed");
+            //         setLoading(false);
+            //       },
+            //     },
+            //   ],
+            //   { cancelable: false }
+            // );
+            setTimeout(() => {
+              setLoading(false);
+            }, 5000);
+          }
+        });
+
+        setUserInfo(user);
+      });
+    } catch (error) {
+      // Add your own error handler here
+    }
   };
 
   const handlePress = async () => {
@@ -117,7 +204,6 @@ export default function Login({ navigation }) {
           />
           <View
             style={{
-              height: 300,
               width: 300,
               borderRadius: 12,
               backgroundColor: "rgba(255,255,255,0.6)",
@@ -174,6 +260,7 @@ export default function Login({ navigation }) {
                 <P style={{ color: "#1560bd" }}>Sign up</P>
               </Button>
             </View>
+
             <View
               style={{
                 width: "100%",
@@ -190,6 +277,20 @@ export default function Login({ navigation }) {
               >
                 <P style={{ color: "white", fontWeight: 600 }}>Login</P>
               </Button>
+            </View>
+            <View
+              style={{
+                width: "100%",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <P style={{ color: "#1560bd" }}>Or Sign in With</P>
+              <IconButton
+                icon={require("../../../resources/google.png")}
+                onPress={() => promptAsync()}
+                disabled={!request}
+              />
             </View>
           </View>
         </View>

@@ -28,7 +28,6 @@ export default function TicketSearchScreen({ navigation }) {
     moment().format("YYYY-MM-DD")
   );
   const [returnDate, setReturnDate] = useState(moment().format("YYYY-MM-DD"));
-  const [fleet, setFleet] = useState("Select your Fleet Type");
   const [loading, setLoading] = useState(false);
 
   const getTripData = async (pickup, drop, departure, returnDate) => {
@@ -79,11 +78,7 @@ export default function TicketSearchScreen({ navigation }) {
 
   const handleFindPress = async () => {
     setLoading(true);
-    if (
-      pickup === "Select Area" ||
-      drop === "Select Area" ||
-      fleet === "Select your Fleet Type"
-    ) {
+    if (pickup === "Select Area" || drop === "Select Area") {
       Alert.alert(
         "Incomplete Information",
         "please Fill in the required fields",
@@ -138,9 +133,6 @@ export default function TicketSearchScreen({ navigation }) {
                 setValue={setReturnDate}
                 value={returnDate}
               />
-            </View>
-            <View>
-              <FleetList title="Fleet" setValue={setFleet} value={fleet} />
             </View>
             <View
               style={{

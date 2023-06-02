@@ -15,7 +15,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.u.m3r.ticketi"
     },
     "android": {
       "adaptiveIcon": {
@@ -31,6 +32,7 @@
       "eas": {
         "projectId": "61f4f295-70e2-45ac-8044-2be6faf46be6"
       }
-    }
+    },
+    "scheme": "ticketi"
   }
 }
