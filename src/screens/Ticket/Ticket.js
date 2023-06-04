@@ -1,5 +1,12 @@
-import { View, Text, ScrollView, Image, ToastAndroid } from "react-native";
-import React, { useContext, useRef } from "react";
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  ToastAndroid,
+  Share,
+} from "react-native";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { C, H, H4, P, T } from "../../infrastructure/components/Text";
 import TicketDetails from "./TicketComponents/TicketDetails";
 import { Spacer } from "../../infrastructure/components/spacer";
@@ -11,6 +18,7 @@ import { captureRef } from "react-native-view-shot";
 import { saveToLibraryAsync } from "expo-media-library";
 
 export default function Ticket({ bookingData, pick, drop, trip }) {
+  // const [imageurl, setImageurl] = useState();
   const { fleets, taxes } = useContext(ApiData);
   const data = `{Bus_Registeration_No:${trip.vehicle_id},TicketId:${bookingData.booking_id},journeyDate:${bookingData.journeydata}}`;
   const ref = useRef();
@@ -22,6 +30,32 @@ export default function Ticket({ bookingData, pick, drop, trip }) {
     Number(trip.adult_fair) * Number(bookingData.adult);
   const vat = Math.round((Number(taxes[0].value) / 100) * subtotal);
   const grandTotal = subtotal + vat;
+
+  // useEffect(() => {
+  //   captureRef(ref).then((uri) => {
+  //     setImageurl(uri);
+  //   });
+  // }, []);
+
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: `I am travelling from ${pick} to ${drop}.Join me in my Journey.Book your tickets from tiketi Popote | Download The app from: {link goes here .}`,
+        // url: imageurl,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      Alert.alert(error.message);
+    }
+  };
 
   async function saveImage() {
     captureRef(ref)
@@ -345,14 +379,33 @@ export default function Ticket({ bookingData, pick, drop, trip }) {
           </View>
         </View>
       </ScrollView>
-      <Button
-        style={{ margin: 10 }}
-        mode="contained"
-        buttonColor="#1560bd"
-        onPress={saveImage}
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          width: "100%",
+        }}
       >
-        <P>SAVE TO PHONE</P>
-      </Button>
+        <Button
+          style={{ margin: 10, flex: 1 }}
+          icon="arrow-down"
+          mode="contained"
+          buttonColor="#1560bd"
+          onPress={saveImage}
+        >
+          <P>DOWNLOAD</P>
+        </Button>
+        <Button
+          style={{ margin: 10, flex: 1 }}
+          icon="share-variant-outline"
+          mode="contained"
+          buttonColor="#1560bd"
+          onPress={onShare}
+        >
+          <P>SHARE</P>
+        </Button>
+      </View>
     </View>
   );
 }

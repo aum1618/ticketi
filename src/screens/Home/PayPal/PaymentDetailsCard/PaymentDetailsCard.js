@@ -8,7 +8,8 @@ import { ApiResponseContext } from "../../../../services/context/ApiResponseCont
 
 export default function PaymentDetailsCard({ total }) {
   const { userData } = useContext(AsyncDataContext);
-  const { journeydate, selectedBookedSeats } = useContext(ApiResponseContext);
+  const { journeydate, selectedBookedSeats, selectedDiscount } =
+    useContext(ApiResponseContext);
   return (
     <View
       style={{
@@ -92,7 +93,12 @@ export default function PaymentDetailsCard({ total }) {
         </View>
         <Spacer position="h" size="m" />
         <View style={{ flexDirection: "row", width: "50%" }}>
-          <P style={{ color: "white", fontWeight: "bold" }}>{total}/-</P>
+          <P style={{ color: "white", fontWeight: "bold" }}>
+            {Math.round(
+              total > selectedDiscount ? total - selectedDiscount : 0
+            )}
+            /-
+          </P>
         </View>
       </View>
     </View>

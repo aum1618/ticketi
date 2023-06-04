@@ -41,6 +41,7 @@ export default function TicketSearchScreen({ navigation }) {
     try {
       await axios.postForm(`${baseUrl}triplist`, tripData).then((response) => {
         if (response.data.status === "success") {
+          console.log(response.data);
           setSelectedPickup(pickup);
           setSelectedDrop(drop);
           setJourneyDate(moment(departure).format("YYYY-M-D"));

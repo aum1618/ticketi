@@ -14,6 +14,7 @@ export default function Bill({
   total,
   subtotal,
   vat,
+  discount,
 }) {
   const { taxes } = useContext(ApiData);
 
@@ -150,12 +151,32 @@ export default function Bill({
             justifyContent: "space-between",
           }}
         >
+          <P style={{ fontWeight: "bold", color: "white" }}>Discount</P>
+          <P style={{ fontWeight: "bold", color: "white" }}>:</P>
+        </View>
+        <Spacer position="h" size="m" />
+        <View style={{ flexDirection: "row", width: "50%" }}>
+          <P style={{ color: "white" }}>
+            {discount === 0 ? "-" : total > discount ? discount : total}
+          </P>
+        </View>
+      </View>
+      <View style={{ flexDirection: "row" }}>
+        <View
+          style={{
+            flexDirection: "row",
+            width: "50%",
+            justifyContent: "space-between",
+          }}
+        >
           <P style={{ fontWeight: "bold", color: "white" }}>Total Fare</P>
           <P style={{ fontWeight: "bold", color: "white" }}>:</P>
         </View>
         <Spacer position="h" size="m" />
         <View style={{ flexDirection: "row", width: "50%" }}>
-          <P style={{ color: "white", fontWeight: "bold" }}>{total}/-</P>
+          <P style={{ color: "white", fontWeight: "bold" }}>
+            {total > discount ? total - discount : 0}/-
+          </P>
         </View>
       </View>
     </View>

@@ -24,9 +24,10 @@ export default function TicketScreen({ navigation, route }) {
     const tripData = new FormData();
     tripData.append("pick_location_id", bookingData.pick_location_id);
     tripData.append("drop_location_id", bookingData.drop_location_id);
-    tripData.append("journeydate", moment().format("YYYY-M-D"));
+    tripData.append("journeydate", moment().add(1, "days").format("YYYY-M-D"));
     tripData.append("returnDate", "");
     axios.postForm(`${baseUrl}triplist`, tripData).then((res) => {
+      console.log(res.data);
       const myTrip = res.data.data.find(
         (x) => x.vehicle_id === bookingData.vehicle_id
       );

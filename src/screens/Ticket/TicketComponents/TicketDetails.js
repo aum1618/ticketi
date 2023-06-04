@@ -20,6 +20,7 @@ export default function TicketDetails({
   const vat = Math.round((Number(taxes[0].value) / 100) * subtotal);
   const grandTotal = subtotal + vat;
   // console.log(vehicle);
+  console.log(bookingData);
   return (
     <View
       style={{
@@ -215,16 +216,6 @@ export default function TicketDetails({
       >
         <View
           style={{
-            flexDirection: "row",
-            borderRightWidth: 1,
-            borderColor: "black",
-            paddingHorizontal: 4,
-          }}
-        >
-          <H>S.NO</H>
-        </View>
-        <View
-          style={{
             flex: 1,
             flexDirection: "row",
             borderRightWidth: 1,
@@ -234,155 +225,153 @@ export default function TicketDetails({
         >
           <H>SeatType</H>
         </View>
+        <View
+          style={{
+            flexDirection: "row",
+            borderRightWidth: 1,
+            borderColor: "black",
+            paddingHorizontal: 4,
+          }}
+        >
+          <H> # </H>
+        </View>
         <View style={{ flex: 1, flexDirection: "row", paddingHorizontal: 4 }}>
           <H>Fare (TSZ)</H>
         </View>
       </View>
-      {Array(Number(bookingData.adult))
-        .fill(0)
-        .map((x, i) => (
+      {!!Number(bookingData?.adult) && (
+        <View
+          style={{
+            width: "100%",
+            borderBottomWidth: 1,
+            borderColor: "black",
+            flexDirection: "row",
+          }}
+        >
           <View
-            key={i}
             style={{
-              width: "100%",
-              borderBottomWidth: 1,
-              borderColor: "black",
+              flex: 1,
               flexDirection: "row",
+              borderRightWidth: 1,
+              borderColor: "black",
+              paddingHorizontal: 4,
             }}
           >
-            <View
-              style={{
-                flexDirection: "row",
-                borderRightWidth: 1,
-                borderColor: "black",
-                paddingHorizontal: 4,
-              }}
-            >
-              <H style={{ color: "#1560bd" }}>{i + 1}</H>
-              <H style={{ color: "white" }}>S.N,,</H>
-            </View>
-
-            <View
-              style={{
-                flex: 1,
-                flexDirection: "row",
-                borderRightWidth: 1,
-                borderColor: "black",
-                paddingHorizontal: 4,
-              }}
-            >
-              <H style={{ color: "#1560bd" }}>Adult</H>
-            </View>
-            <View
-              style={{
-                flex: 1,
-                flexDirection: "row",
-                paddingHorizontal: 4,
-                justifyContent: "flex-end",
-              }}
-            >
-              <H style={{ color: "#1560bd" }}>{trip.adult_fair}</H>
-            </View>
+            <H style={{ color: "#1560bd" }}>Adult</H>
           </View>
-        ))}
-      {Array(Number(bookingData.chield))
-        .fill(0)
-        .map((x, i) => (
           <View
-            key={i}
             style={{
-              width: "100%",
-              borderBottomWidth: 1,
-              borderColor: "black",
               flexDirection: "row",
+              borderRightWidth: 1,
+              borderColor: "black",
+              paddingHorizontal: 4,
             }}
           >
-            <View
-              style={{
-                flexDirection: "row",
-                borderRightWidth: 1,
-                borderColor: "black",
-                paddingHorizontal: 4,
-              }}
-            >
-              <H style={{ color: "#1560bd" }}>
-                {Number(bookingData.adult) + i + 1}
-              </H>
-              <H style={{ color: "white" }}>S.N,,</H>
-            </View>
-
-            <View
-              style={{
-                flex: 1,
-                flexDirection: "row",
-                borderRightWidth: 1,
-                borderColor: "black",
-                paddingHorizontal: 4,
-              }}
-            >
-              <H style={{ color: "#1560bd" }}>Child</H>
-            </View>
-            <View
-              style={{
-                flex: 1,
-                flexDirection: "row",
-                paddingHorizontal: 4,
-                justifyContent: "flex-end",
-              }}
-            >
-              <H style={{ color: "#1560bd" }}>{trip.child_fair}</H>
-            </View>
+            <H style={{ color: "#1560bd" }}>{bookingData.adult}</H>
           </View>
-        ))}
-      {Array(Number(bookingData.special))
-        .fill(0)
-        .map((x, i) => (
+
           <View
-            key={i}
             style={{
-              width: "100%",
-              borderBottomWidth: 1,
-              borderColor: "black",
+              flex: 1,
               flexDirection: "row",
+              paddingHorizontal: 4,
+              justifyContent: "flex-end",
             }}
           >
-            <View
-              style={{
-                flexDirection: "row",
-                borderRightWidth: 1,
-                borderColor: "black",
-                paddingHorizontal: 4,
-              }}
-            >
-              <H style={{ color: "#1560bd" }}>
-                {Number(bookingData.adult) + Number(bookingData.chield) + i + 1}
-              </H>
-              <H style={{ color: "white" }}>S.N,,</H>
-            </View>
-
-            <View
-              style={{
-                flex: 1,
-                flexDirection: "row",
-                borderRightWidth: 1,
-                borderColor: "black",
-                paddingHorizontal: 4,
-              }}
-            >
-              <H style={{ color: "#1560bd" }}>Special</H>
-            </View>
-            <View
-              style={{
-                flex: 1,
-                flexDirection: "row",
-                paddingHorizontal: 4,
-                justifyContent: "flex-end",
-              }}
-            >
-              <H style={{ color: "#1560bd" }}>{trip.special_fair}</H>
-            </View>
+            <H style={{ color: "#1560bd" }}>
+              {Number(trip.adult_fair) * Number(bookingData.adult)}
+            </H>
           </View>
-        ))}
+        </View>
+      )}
+      {!!Number(bookingData?.chield) && (
+        <View
+          style={{
+            width: "100%",
+            borderBottomWidth: 1,
+            borderColor: "black",
+            flexDirection: "row",
+          }}
+        >
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              borderRightWidth: 1,
+              borderColor: "black",
+              paddingHorizontal: 4,
+            }}
+          >
+            <H style={{ color: "#1560bd" }}>Child</H>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              borderRightWidth: 1,
+              borderColor: "black",
+              paddingHorizontal: 4,
+            }}
+          >
+            <H style={{ color: "#1560bd" }}>{bookingData.chield} </H>
+          </View>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              paddingHorizontal: 4,
+              justifyContent: "flex-end",
+            }}
+          >
+            <H style={{ color: "#1560bd" }}>
+              {Number(trip.child_fair) * Number(bookingData.chield)}
+            </H>
+          </View>
+        </View>
+      )}
+      {!!Number(bookingData?.special) && (
+        <View
+          style={{
+            width: "100%",
+            borderBottomWidth: 1,
+            borderColor: "black",
+            flexDirection: "row",
+          }}
+        >
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              borderRightWidth: 1,
+              borderColor: "black",
+              paddingHorizontal: 4,
+            }}
+          >
+            <H style={{ color: "#1560bd" }}>Special</H>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              borderRightWidth: 1,
+              borderColor: "black",
+              paddingHorizontal: 4,
+            }}
+          >
+            <H style={{ color: "#1560bd" }}>{bookingData.special} </H>
+          </View>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              paddingHorizontal: 4,
+              justifyContent: "flex-end",
+            }}
+          >
+            <H style={{ color: "#1560bd" }}>
+              {Number(trip.special_fair) * Number(bookingData.special)}
+            </H>
+          </View>
+        </View>
+      )}
 
       <View
         style={{

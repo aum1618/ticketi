@@ -10,6 +10,7 @@ import { AsyncDataContext } from "../../../services/context/AsyncDataContext/Asy
 import { ApiResponseContext } from "../../../services/context/ApiResponseContext/ApiResponseContextProvider";
 import axios from "axios";
 import moment from "moment";
+import { baseUrl } from "../../../baseUrl/baseUrl";
 
 export default function PayCash({ navigation, route }) {
   const { userData } = useContext(AsyncDataContext);
@@ -26,6 +27,7 @@ export default function PayCash({ navigation, route }) {
     selectedSubTotal,
     selectedvat,
     journeydate,
+    selectedDiscount,
   } = useContext(ApiResponseContext);
   const [loading, setLoading] = useState(false);
 
@@ -70,14 +72,17 @@ export default function PayCash({ navigation, route }) {
     bookingData.append("totalseat", selectedBookedSeats.length);
     bookingData.append("payment_status", "unpaid");
 
-    bookingData.append("grandtotal", selectedtotal);
-    bookingData.append("discount", 0);
+    bookingData.append(
+      "grandtotal",
+      selectedtotal > selectedDiscount ? selectedtotal - selectedDiscount : 0
+    );
+    bookingData.append(
+      "discount",
+      selectedtotal > selectedDiscount ? selectedDiscount : selectedtotal
+    );
     bookingData.append("tax", selectedvat);
     axios
-      .postForm(
-        "https://tiketipopote.co.tz/adminpanel/modules/api/v1/tickets/unpaid/booking",
-        bookingData
-      )
+      .postForm(`${baseUrl}tickets/unpaid/booking`, bookingData)
       .then((res) => {
         console.log(res.data.data);
         setSelectedBookingData(res.data.data);

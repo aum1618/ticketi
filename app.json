@@ -25,6 +25,16 @@
       },
       "package": "com.u.m3r.ticketi"
     },
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icon.png",
+          "color": "#ffffff",
+          "mode": "production"
+        }
+      ]
+    ],
     "web": {
       "favicon": "./assets/favicon.png"
     },

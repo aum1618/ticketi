@@ -5,6 +5,7 @@ import { ThemeProvider } from "styled-components";
 import { theme } from "./src/infrastructure/theme/theme";
 import { Wrapper } from "./src/infrastructure/components/Wrapper";
 import { SafeArea } from "./src/infrastructure/components/SafeArea";
+
 import {
   useFonts,
   Montserrat_400Regular,
@@ -19,6 +20,15 @@ import ApiResponseContextProvider from "./src/services/context/ApiResponseContex
 import AuthNavigator from "./src/navigation/AuthNavigator/AuthNavigator";
 import AsyncDataContextProvider from "./src/services/context/AsyncDataContext/AsyncDataContext";
 import IndexScreen from "./src/navigation/Index";
+// import * as Notifications from "expo-notifications";
+
+// Notifications.setNotificationHandler({
+//   handleNotification: async () => ({
+//     shouldShowAlert: true,
+//     shouldPlaySound: false,
+//     shouldSetBadge: false,
+//   }),
+// });
 
 export default function App() {
   let [fontsLoaded] = useFonts({

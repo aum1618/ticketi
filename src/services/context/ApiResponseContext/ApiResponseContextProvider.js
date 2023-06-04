@@ -24,6 +24,7 @@ export default function ApiResponseContextProvider({ children }) {
   const [journeydate, setJourneyDate] = useState();
   const [selectedSubTotal, setSelectedSubTotal] = useState();
   const [selectedvat, setSelectedvat] = useState();
+  const [selectedDiscount, setSelectedDiscount] = useState();
 
   return (
     <ApiResponseContext.Provider
@@ -45,6 +46,8 @@ export default function ApiResponseContextProvider({ children }) {
         journeydate,
         selectedSubTotal,
         selectedvat,
+        selectedDiscount,
+        setSelectedDiscount,
         setSelectedSubTotal,
         setSelectedvat,
         setJourneyDate,

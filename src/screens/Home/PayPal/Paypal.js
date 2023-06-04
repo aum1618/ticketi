@@ -18,6 +18,7 @@ import axios from "axios";
 import AnimatedLottieView from "lottie-react-native";
 import { AsyncDataContext } from "../../../services/context/AsyncDataContext/AsyncDataContext";
 import moment from "moment";
+import { baseUrl } from "../../../baseUrl/baseUrl";
 
 export default function Paypal({ navigation }) {
   const { userData } = useContext(AsyncDataContext);
@@ -33,6 +34,7 @@ export default function Paypal({ navigation }) {
     selectedtotal,
     selectedSubTotal,
     selectedvat,
+    selectedDiscount,
   } = useContext(ApiResponseContext);
   const [accessToken, setAccessToken] = useState();
   const [paypalUrl, setPaypalUrl] = useState();
@@ -83,18 +85,19 @@ export default function Paypal({ navigation }) {
     bookingData.append("partialpay", "");
     bookingData.append("pay_method", "paypal");
 
-    bookingData.append("grandtotal", selectedtotal);
-    bookingData.append("discount", 0);
+    bookingData.append(
+      "grandtotal",
+      selectedtotal > selectedDiscount ? selectedtotal - selectedDiscount : 0
+    );
+    bookingData.append(
+      "discount",
+      selectedtotal > selectedDiscount ? selectedDiscount : selectedtotal
+    );
     bookingData.append("tax", selectedvat);
-    axios
-      .postForm(
-        "https://tiketipopote.co.tz/adminpanel/modules/api/v1/tickets/booking",
-        bookingData
-      )
-      .then((res) => {
-        console.log(res.data.data);
-        setSelectedBookingData(res.data.data);
-      });
+    axios.postForm(`${baseUrl}tickets/booking`, bookingData).then((res) => {
+      console.log(res.data.data);
+      setSelectedBookingData(res.data.data);
+    });
   };
 
   const orderDetails = {
@@ -108,17 +111,35 @@ export default function Paypal({ navigation }) {
             quantity: "1",
             unit_amount: {
               currency_code: "USD",
-              value: String(selectedtotal),
+              value: String(
+                Math.round(
+                  selectedtotal > selectedDiscount
+                    ? selectedtotal - selectedDiscount
+                    : 0
+                )
+              ),
             },
           },
         ],
         amount: {
           currency_code: "USD",
-          value: String(selectedtotal),
+          value: String(
+            Math.round(
+              selectedtotal > selectedDiscount
+                ? selectedtotal - selectedDiscount
+                : 0
+            )
+          ),
           breakdown: {
             item_total: {
               currency_code: "USD",
-              value: String(selectedtotal),
+              value: String(
+                Math.round(
+                  selectedtotal > selectedDiscount
+                    ? selectedtotal - selectedDiscount
+                    : 0
+                )
+              ),
             },
           },
         },

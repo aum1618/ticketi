@@ -4,9 +4,13 @@ import { P } from "../../../../infrastructure/components/Text";
 import { Spacer } from "../../../../infrastructure/components/spacer";
 import { Button } from "react-native-paper";
 import { ApiResponseContext } from "../../../../services/context/ApiResponseContext/ApiResponseContextProvider";
+import { ApiData } from "../../../../services/context/ApiDataContext/ApiDataProvider";
 
 export default function BusCard({ bus, navigation }) {
   const { setSelectedBus } = useContext(ApiResponseContext);
+  const { fleets } = useContext(ApiData);
+  // console.log(fleets, bus);
+  const fleet = fleets.find((item) => item.id === bus.item.fleet_id);
 
   const handlePress = () => {
     setSelectedBus(bus);
@@ -56,7 +60,7 @@ export default function BusCard({ bus, navigation }) {
             justifyContent: "space-between",
           }}
         >
-          <P style={{ fontWeight: "bold", color: "white" }}>Departure Time</P>
+          <P style={{ fontWeight: "bold", color: "white" }}>Departure</P>
           <P style={{ fontWeight: "bold", color: "white" }}>:</P>
         </View>
         <Spacer position="h" size="m" />
@@ -72,12 +76,28 @@ export default function BusCard({ bus, navigation }) {
             justifyContent: "space-between",
           }}
         >
-          <P style={{ fontWeight: "bold", color: "white" }}>Arrival Time</P>
+          <P style={{ fontWeight: "bold", color: "white" }}>Arrival</P>
           <P style={{ fontWeight: "bold", color: "white" }}>:</P>
         </View>
         <Spacer position="h" size="m" />
         <View style={{ flexDirection: "row", width: "50%" }}>
           <P style={{ color: "white" }}>{bus.item.end_time}</P>
+        </View>
+      </View>
+      <View style={{ flexDirection: "row" }}>
+        <View
+          style={{
+            flexDirection: "row",
+            width: "50%",
+            justifyContent: "space-between",
+          }}
+        >
+          <P style={{ fontWeight: "bold", color: "white" }}>Fleet Type</P>
+          <P style={{ fontWeight: "bold", color: "white" }}>:</P>
+        </View>
+        <Spacer position="h" size="m" />
+        <View style={{ flexDirection: "row", width: "50%" }}>
+          <P style={{ color: "white" }}>{fleet.type}</P>
         </View>
       </View>
       <View style={{ flexDirection: "row" }}>
